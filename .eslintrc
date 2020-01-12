@@ -23,7 +23,8 @@
         "devDependencies": true
       }
     ],
-    "no-underscore-dangle": [0]
+    "no-underscore-dangle": [0],
+    "implicit-arrow-linebreak": "off"
   },
   "env": {
     "node": true,

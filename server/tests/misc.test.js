@@ -9,55 +9,35 @@ chai.config.includeStack = true;
 
 describe('## Misc', () => {
   describe('# GET /api/health-check', () => {
-    it('should return OK', (done) => {
+    it('should return OK', () =>
       request(app)
         .get('/api/health-check')
         .expect(httpStatus.OK)
-        .then((res) => {
-          expect(res.text).to.equal('OK');
-          done();
-        })
-        .catch(done);
-    });
+        .then((res) => expect(res.text).to.equal('OK')));
   });
 
   describe('# GET /api/404', () => {
-    it('should return 404 status', (done) => {
+    it('should return 404 status', () =>
       request(app)
         .get('/api/404')
         .expect(httpStatus.NOT_FOUND)
-        .then((res) => {
-          expect(res.body.message).to.equal('Not Found');
-          done();
-        })
-        .catch(done);
-    });
+        .then((res) => expect(res.body.message).to.equal('Not Found')));
   });
 
   describe('# Error Handling', () => {
-    it('should handle mongoose CastError - Cast to ObjectId failed', (done) => {
+    it('should handle mongoose CastError - Cast to ObjectId failed', () =>
       request(app)
         .get('/api/users/56z787zzz67fc')
         .expect(httpStatus.INTERNAL_SERVER_ERROR)
-        .then((res) => {
-          expect(res.body.message).to.equal('Internal Server Error');
-          done();
-        })
-        .catch(done);
-    });
+        .then((res) => expect(res.body.message).to.equal('Internal Server Error')));
 
-    it('should handle express validation error - username is required', (done) => {
+    it('should handle express validation error - username is required', () =>
       request(app)
         .post('/api/users')
         .send({
           mobileNumber: '1234567890'
         })
         .expect(httpStatus.BAD_REQUEST)
-        .then((res) => {
-          expect(res.body.message).to.equal('"username" is required');
-          done();
-        })
-        .catch(done);
-    });
+        .then((res) => expect(res.body.message).to.equal('"username" is required')));
   });
 });
