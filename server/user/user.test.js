@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const request = require('supertest-as-promised');
 const httpStatus = require('http-status');
 const chai = require('chai'); // eslint-disable-line import/newline-after-import
-const expect = chai.expect;
+const { expect } = chai;
+
 const app = require('../../index');
 
 chai.config.includeStack = true;
@@ -25,7 +26,7 @@ describe('## User APIs', () => {
   };
 
   describe('# POST /api/users', () => {
-    it('should create a new user', (done) => {
+    it('should create a new user', () => {
       request(app)
         .post('/api/users')
         .send(user)
@@ -34,9 +35,7 @@ describe('## User APIs', () => {
           expect(res.body.username).to.equal(user.username);
           expect(res.body.mobileNumber).to.equal(user.mobileNumber);
           user = res.body;
-          done();
-        })
-        .catch(done);
+        });
     });
   });
 

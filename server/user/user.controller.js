@@ -9,7 +9,7 @@ function load(req, res, next, id) {
       req.user = user; // eslint-disable-line no-param-reassign
       return next();
     })
-    .catch(e => next(e));
+    .catch((e) => next(e));
 }
 
 /**
@@ -33,8 +33,8 @@ function create(req, res, next) {
   });
 
   user.save()
-    .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
+    .then((savedUser) => res.json(savedUser))
+    .catch((e) => next(e));
 }
 
 /**
@@ -44,13 +44,13 @@ function create(req, res, next) {
  * @returns {User}
  */
 function update(req, res, next) {
-  const user = req.user;
+  const { user } = req;
   user.username = req.body.username;
   user.mobileNumber = req.body.mobileNumber;
 
   user.save()
-    .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
+    .then((savedUser) => res.json(savedUser))
+    .catch((e) => next(e));
 }
 
 /**
@@ -62,8 +62,8 @@ function update(req, res, next) {
 function list(req, res, next) {
   const { limit = 50, skip = 0 } = req.query;
   User.list({ limit, skip })
-    .then(users => res.json(users))
-    .catch(e => next(e));
+    .then((users) => res.json(users))
+    .catch((e) => next(e));
 }
 
 /**
@@ -71,10 +71,12 @@ function list(req, res, next) {
  * @returns {User}
  */
 function remove(req, res, next) {
-  const user = req.user;
+  const { user } = req;
   user.remove()
-    .then(deletedUser => res.json(deletedUser))
-    .catch(e => next(e));
+    .then((deletedUser) => res.json(deletedUser))
+    .catch((e) => next(e));
 }
 
-module.exports = { load, get, create, update, list, remove };
+module.exports = {
+  load, get, create, update, list, remove
+};

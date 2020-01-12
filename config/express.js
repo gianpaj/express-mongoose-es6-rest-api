@@ -9,6 +9,7 @@ const httpStatus = require('http-status');
 const expressWinston = require('express-winston');
 const expressValidation = require('express-validation');
 const helmet = require('helmet');
+
 const winstonInstance = require('./winston');
 const routes = require('../index.route');
 const config = require('./config');
@@ -53,10 +54,11 @@ app.use('/api', routes);
 app.use((err, req, res, next) => {
   if (err instanceof expressValidation.ValidationError) {
     // validation error contains errors which is an array of error each containing message[]
-    const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
+    const unifiedErrorMessage = err.errors.map((error) => error.messages.join('. ')).join(' and ');
     const error = new APIError(unifiedErrorMessage, err.status, true);
     return next(error);
-  } else if (!(err instanceof APIError)) {
+  }
+  if (!(err instanceof APIError)) {
     const apiError = new APIError(err.message, err.status, err.isPublic);
     return next(apiError);
   }
@@ -77,11 +79,10 @@ if (config.env !== 'test') {
 }
 
 // error handler, send stacktrace only during development
-app.use((err, req, res, next) => // eslint-disable-line no-unused-vars
-  res.status(err.status).json({
-    message: err.isPublic ? err.message : httpStatus[err.status],
-    stack: config.env === 'development' ? err.stack : {}
-  })
-);
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => res.status(err.status).json({
+  message: err.isPublic ? err.message : httpStatus[err.status],
+  stack: config.env === 'development' ? err.stack : {}
+}));
 
 module.exports = app;
