@@ -1,8 +1,20 @@
+/* eslint-disable global-require */
 const Joi = require('joi');
-const path = require('path');
 
-// require and configure dotenv, will load vars in .env in PROCESS.ENV
-require('dotenv').config({ path: path.join(__dirname, '../.env') });
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+const isTestEnv = NODE_ENV === 'test';
+const isDevEnv = NODE_ENV === 'development';
+
+// require and configure dotenv, will load vars from .env file in process.env
+if (isTestEnv || isDevEnv) {
+  // eslint-disable-next-line no-console
+  console.warn(`running on "${NODE_ENV}" environment`);
+  require('dotenv').config({ path: `.env.${NODE_ENV}` });
+} else {
+  require('dotenv').config();
+}
+
 
 // define validation for all the env vars
 const envVarsSchema = Joi.object({
